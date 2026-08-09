@@ -188,23 +188,6 @@
   }
 
   /* ------------------------------------------------------------ companies */
-  function companyCard(co) {
-    return el('button', { class: 'record', type: 'button', onclick: () => openCompany(co.id) }, [
-      el('div', { class: 'row-between' }, [
-        el('div', { class: 'grow' }, [
-          el('div', { class: 'record-title' }, co.name),
-          el('div', { class: 'record-sub' }, co.category + ' · ' + co.hq)
-        ]),
-        stageBadge(co.stage)
-      ]),
-      el('div', { class: 'record-meta' }, [
-        meter(co.strength),
-        el('span', { class: 'mono faint' }, co.contactIds.length + ' people'),
-        el('span', { class: 'mono faint' }, relDays(co.lastTouch))
-      ])
-    ]);
-  }
-
   function companyTable(rows) {
     const cols = [
       ['name', 'Company'], ['category', 'Category'], ['stage', 'Stage'],
@@ -274,11 +257,12 @@
           mountCrm(host, true);
         })))),
 
-      el('p', { class: 'mono faint', style: 'margin-bottom:var(--s-3)' },
+      // The count labels the table, so it rides with it on desktop only.
+      el('p', { class: 'mono faint only-desk', style: 'margin-bottom:var(--s-3)' },
         rows.length + (rows.length === 1 ? ' company' : ' companies')),
 
-      // Cards below 1024px, table above — same data, same drawer.
-      el('div', { class: 'only-mobile' }, el('div', { class: 'record-list' }, rows.map(companyCard))),
+      // Table from 1024px up. Mobile stops at the stat tiles and category
+      // chips; companies are reached through Search there.
       el('div', { class: 'only-desk' }, companyTable(rows))
     );
   }
