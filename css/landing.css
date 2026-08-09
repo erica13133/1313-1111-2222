@@ -1,0 +1,129 @@
+/* ==========================================================================
+   Sedona AI — Landing page
+   Only what the marketing page needs. Everything structural (buttons, cards,
+   inputs, badges, .shell, .lede) comes from tokens/base/components.
+   Mobile-first, same as the rest of the system.
+   ========================================================================== */
+
+/* --- Header --------------------------------------------------------------
+   Not the app's .app-header: no sidebar, no search, and it scrolls with the
+   page rather than sticking, so the hero owns the first screen.
+   ------------------------------------------------------------------------ */
+.site-header {
+  padding-block: var(--s-4);
+  padding-top: calc(var(--safe-t) + var(--s-4));
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--bg);
+}
+
+/* --- Hero ---------------------------------------------------------------- */
+.hero {
+  padding-block: var(--s-12) var(--s-16);
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-10);
+  align-items: center;
+}
+.hero h1 {
+  font-size: var(--t-5xl);
+  margin-block: var(--s-3) var(--s-5);
+}
+
+/* The sample card is decoration on a phone — the form matters more, so it
+   drops below the fold rather than pushing the form down. */
+.hero-card { order: 2; }
+
+@media (min-width: 1024px) {
+  .hero { padding-block: var(--s-20) var(--s-24); }
+  .hero-grid {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: var(--s-16);
+  }
+}
+
+/* --- Waitlist form ------------------------------------------------------- */
+.waitlist { margin-top: var(--s-8); max-width: 32rem; }
+
+.waitlist-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-3);
+}
+/* Side by side as soon as there is room for a full email address. */
+@media (min-width: 560px) {
+  .waitlist-row { grid-template-columns: 1fr auto; }
+}
+
+.waitlist-note {
+  margin-top: var(--s-3);
+  font-size: var(--t-xs);
+  line-height: 1.5;
+}
+
+.waitlist-msg {
+  margin-top: var(--s-3);
+  font-size: var(--t-sm);
+  line-height: 1.5;
+  display: none;              /* revealed once there is something to say */
+}
+.waitlist-msg.is-shown { display: block; }
+.waitlist-msg.is-ok    { color: var(--sage-vortex); }
+.waitlist-msg.is-error { color: var(--accent); }
+
+.input.is-invalid { border-color: var(--accent); }
+
+/* --- Sections ------------------------------------------------------------ */
+.section { padding-block: var(--s-16); }
+@media (min-width: 1024px) { .section { padding-block: var(--s-24); } }
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-4);
+}
+@media (min-width: 640px)  { .feature-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .feature-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.feature h3 { margin-block: var(--s-4) var(--s-2); }
+.feature p  { font-size: var(--t-sm); line-height: var(--lh-body); }
+
+.feature-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  border-radius: var(--r-sm);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.feature-icon svg { width: 20px; height: 20px; }
+
+/* --- Closing ------------------------------------------------------------- */
+.closing {
+  background: var(--bg-recessed);
+  border-block: 1px solid var(--border-soft);
+}
+.closing-inner { text-align: center; }
+.closing-inner .lede { margin-top: var(--s-4); }
+
+/* --- Footer -------------------------------------------------------------- */
+.site-footer {
+  padding-block: var(--s-8);
+  padding-bottom: calc(var(--safe-b) + var(--s-8));
+  border-top: 1px solid var(--border-soft);
+}
+.site-footer nav { gap: var(--s-5); }
+
+/* --- Reveal on scroll ----------------------------------------------------
+   .reveal ships hidden from base.css. If IntersectionObserver is missing or
+   JS fails, nothing would ever un-hide it — so only opt in once JS is alive.
+   ------------------------------------------------------------------------ */
+.js-reveal .reveal { opacity: 0; transform: translateY(18px); }
+.reveal { opacity: 1; transform: none; }
+.js-reveal .reveal.is-visible { opacity: 1; transform: none; }
+
+/* base.css already neutralises .reveal under reduced motion, but the
+   .js-reveal rules above outrank it — so restate the opt-out here. */
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal .reveal { opacity: 1; transform: none; }
+}

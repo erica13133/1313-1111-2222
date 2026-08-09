@@ -430,6 +430,32 @@
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+/* --- Shared page chrome -------------------------------------------------
+   Used by both the landing page and the demo app, so it lives here rather
+   than in app.css.
+   ------------------------------------------------------------------------ */
+.skip-link {
+  position: absolute; left: var(--s-4); top: -60px;
+  z-index: 100;
+  padding: var(--s-3) var(--s-4);
+  background: var(--accent); color: var(--on-accent);
+  border-radius: var(--r-sm);
+  transition: top var(--dur-fast) var(--ease-out);
+}
+.skip-link:focus { top: calc(var(--safe-t) + var(--s-2)); }
+
+.brand {
+  display: flex; align-items: center; gap: var(--s-2);
+  text-decoration: none; flex-shrink: 0;
+}
+.brand-word {
+  font-family: var(--font-display);
+  font-size: var(--t-lg);
+  font-weight: 550;
+  letter-spacing: -0.02em;
+}
+.brand-ai { color: var(--accent); margin-left: 0.28em; }
+
 /* --- Demo-data disclosure ribbon ---------------------------------------- */
 .demo-tag {
   display: inline-flex; align-items: center; gap: var(--s-2);

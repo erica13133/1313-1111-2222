@@ -9,15 +9,8 @@
 }
 @media (min-width: 1024px) { .app-body { padding-bottom: 0; } }
 
-.skip-link {
-  position: absolute; left: var(--s-4); top: -60px;
-  z-index: 100;
-  padding: var(--s-3) var(--s-4);
-  background: var(--accent); color: var(--on-accent);
-  border-radius: var(--r-sm);
-  transition: top var(--dur-fast) var(--ease-out);
-}
-.skip-link:focus { top: calc(var(--safe-t) + var(--s-2)); }
+/* .skip-link and .brand now live in components.css — the landing page needs
+   the same chrome, and only this file is app-only. */
 
 /* --- Header ------------------------------------------------------------- */
 .app-header {
@@ -29,18 +22,6 @@
   backdrop-filter: saturate(1.4) blur(12px);
   border-bottom: 1px solid var(--border);
 }
-
-.brand {
-  display: flex; align-items: center; gap: var(--s-2);
-  text-decoration: none; flex-shrink: 0;
-}
-.brand-word {
-  font-family: var(--font-display);
-  font-size: var(--t-lg);
-  font-weight: 550;
-  letter-spacing: -0.02em;
-}
-.brand-ai { color: var(--accent); margin-left: 0.28em; }
 
 .header-search { flex: 1; display: flex; justify-content: center; min-width: 0; }
 .header-search .search-input { width: 100%; max-width: 460px; }

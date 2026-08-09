@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Privacy — Sedona AI</title>
+<meta name="description" content="How Sedona AI handles personal data.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/landing.css">
+<script>
+  try {
+    var t = localStorage.getItem('sedona-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="shell row-between">
+    <a class="brand" href="index.html" aria-label="Sedona AI home">
+      <img src="assets/logo.svg" alt="" width="28" height="28">
+      <span class="brand-word">Sedona<span class="brand-ai">AI</span></span>
+    </a>
+    <a class="btn btn-secondary btn-sm" href="index.html">Back</a>
+  </div>
+</header>
+
+<main class="section">
+  <div class="shell" style="max-width:var(--maxw-prose)">
+
+    <!-- ==================================================================
+         UNFINISHED. This is a skeleton, not a policy. Every {{PLACEHOLDER}}
+         below needs a real answer, and the whole thing needs review by a
+         lawyer before it goes live. Delete this banner when that is done.
+         ================================================================== -->
+    <div class="card card-pad" style="border-color:var(--accent); margin-bottom:var(--s-10)">
+      <p class="eyebrow" style="margin-bottom:var(--s-2)">Draft — not yet in force</p>
+      <p style="font-size:var(--t-sm)">
+        This page is a structural skeleton with placeholders, published only so
+        the footer link resolves. It has not been reviewed by a lawyer and does
+        not describe any commitment. Do not rely on it, and do not launch a
+        waitlist against it as written.
+      </p>
+    </div>
+
+    <p class="eyebrow">Legal</p>
+    <h1 style="margin-block:var(--s-3) var(--s-6)">Privacy</h1>
+    <p class="mono faint" style="margin-bottom:var(--s-10)">
+      Last updated {{DATE}}
+    </p>
+
+    <div class="stack-lg">
+      <section>
+        <h3>Who we are</h3>
+        <p class="muted">
+          {{LEGAL ENTITY NAME}}, {{REGISTERED ADDRESS}}. For anything on this
+          page, contact {{PRIVACY CONTACT EMAIL}}.
+        </p>
+      </section>
+
+      <section>
+        <h3>What we collect</h3>
+        <p class="muted">
+          <strong>Waitlist.</strong> Your email address, and the date you
+          submitted it. That is all the form sends.
+        </p>
+        <p class="muted" style="margin-top:var(--s-3)">
+          <strong>The demo.</strong> The demo at
+          <a href="demo.html">/demo.html</a> runs entirely in your browser on
+          invented data. If you grant camera or microphone access there, nothing
+          is recorded, uploaded, or retained — the stream stays on your device.
+          {{RE-CONFIRM THIS SENTENCE BEFORE EVERY RELEASE — it stops being true
+          the moment real OCR or transcription is wired up.}}
+        </p>
+        <p class="muted" style="margin-top:var(--s-3)">
+          <strong>Analytics.</strong> {{NONE — or name the tool, say whether it
+          sets cookies, and link its policy.}}
+        </p>
+      </section>
+
+      <section>
+        <h3>Why we collect it</h3>
+        <p class="muted">
+          To email you once when access opens, and to gauge how much interest
+          there is. Nothing else. Our lawful basis under the GDPR is
+          {{CONSENT / LEGITIMATE INTEREST — pick one and be able to defend it}}.
+        </p>
+      </section>
+
+      <section>
+        <h3>Who else sees it</h3>
+        <p class="muted">
+          {{NAME EVERY PROCESSOR: the email platform, the host, the database
+          provider. Each needs a signed DPA. Say where they store data — if any
+          of them is outside the UK/EEA, name the transfer mechanism.}}
+        </p>
+      </section>
+
+      <section>
+        <h3>How long we keep it</h3>
+        <p class="muted">
+          {{A SPECIFIC PERIOD, not "as long as necessary". For a waitlist,
+          something like: until launch, or 24 months, whichever comes first.}}
+        </p>
+      </section>
+
+      <section>
+        <h3>Your rights</h3>
+        <p class="muted">
+          You can ask for a copy of your data, correct it, or have it deleted,
+          and you can withdraw consent at any time — every email we send carries
+          an unsubscribe link. Write to {{PRIVACY CONTACT EMAIL}} and we will
+          respond within {{30 DAYS}}. If you are in the UK or EEA and are not
+          satisfied, you can complain to your data protection authority.
+        </p>
+      </section>
+
+      <section>
+        <h3>Children</h3>
+        <p class="muted">
+          Sedona is not intended for anyone under {{16 / 13}}, and we do not
+          knowingly collect their data.
+        </p>
+      </section>
+
+      <section>
+        <h3>Changes</h3>
+        <p class="muted">
+          If this policy changes materially we will email anyone on the
+          waitlist before the change takes effect.
+        </p>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="shell row-between wrap">
+    <p class="muted" style="font-size:var(--t-sm)">© <span id="year">2026</span> Sedona AI</p>
+    <nav class="row wrap" style="gap:var(--s-5); font-size:var(--t-sm)" aria-label="Footer">
+      <a href="index.html">Home</a>
+      <a href="demo.html">Demo</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  var y = document.getElementById('year');
+  if (y) y.textContent = String(new Date().getFullYear());
+</script>
+</body>
+</html>

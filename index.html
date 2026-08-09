@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sedona AI — Demo</title>
-<meta name="description" content="Sedona AI product demo: business-card scanning, a voice agent, a partnership calendar, and a company CRM. Fictional data.">
+<title>Sedona AI — Partnerships, remembered</title>
+<meta name="description" content="Sedona AI turns business cards, voice notes, and meetings into a partnership CRM that keeps its own read on where every relationship actually stands. Join the waitlist.">
 <link rel="icon" href="assets/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,112 +12,185 @@
 <link rel="stylesheet" href="css/tokens.css">
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/components.css">
-<link rel="stylesheet" href="css/app.css">
+<link rel="stylesheet" href="css/landing.css">
+<script>
+  /* Applied before first paint so a dark-mode visitor never sees a light
+     flash. Mirrors the key that js/router.js writes on the demo page. */
+  try {
+    var t = localStorage.getItem('sedona-theme');
+    if (t) document.documentElement.setAttribute('data-theme', t);
+  } catch (e) { /* private mode — fall back to the OS preference */ }
+</script>
 </head>
-<body class="app-body">
+<body>
 
-<a href="#view-host" class="skip-link">Skip to content</a>
+<a href="#waitlist" class="skip-link">Skip to the waitlist</a>
 
 <!-- ===================== Header ===================== -->
-<header class="app-header">
-  <a class="brand" href="index.html" aria-label="Sedona AI home">
-    <img src="assets/logo.svg" alt="" width="28" height="28">
-    <span class="brand-word">Sedona<span class="brand-ai">AI</span></span>
-  </a>
+<header class="site-header">
+  <div class="shell row-between">
+    <a class="brand" href="index.html" aria-label="Sedona AI home">
+      <img src="assets/logo.svg" alt="" width="28" height="28">
+      <span class="brand-word">Sedona<span class="brand-ai">AI</span></span>
+    </a>
 
-  <!-- Desktop: a live search field. Mobile: an icon that opens a sheet. -->
-  <div class="header-search only-desk">
-    <div class="search-input" id="header-search">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
-      <input type="search" id="search-field" placeholder="Search people, companies, meetings…" aria-label="Search everything" autocomplete="off">
-      <span class="kbd-hint row" style="gap:3px"><kbd class="kbd">⌘</kbd><kbd class="kbd">K</kbd></span>
+    <div class="row" style="gap:var(--s-2)">
+      <button class="btn-icon" id="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <a class="btn btn-secondary btn-sm" href="demo.html">See the demo</a>
     </div>
-  </div>
-
-  <div class="header-actions">
-    <button class="btn-icon only-mobile" id="mobile-search-btn" aria-label="Search">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
-    </button>
-    <button class="btn-icon" id="theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-    </button>
-    <span class="avatar avatar-t2 only-desk" title="Elena Ruiz — demo account">ER</span>
   </div>
 </header>
 
-<div class="app-frame">
+<main>
 
-  <!-- ===================== Sidebar (desktop) ===================== -->
-  <nav class="sidebar only-desk" aria-label="Main">
-    <p class="nav-heading">Capture</p>
-    <a class="nav-link" href="#/scan" data-view="scan">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M7 12h10"/></svg>
-      <span>Scan a card</span>
-    </a>
-    <a class="nav-link" href="#/voice" data-view="voice">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg>
-      <span>Voice agent</span>
-    </a>
+  <!-- ===================== Hero ===================== -->
+  <section class="hero">
+    <div class="shell hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Partnership intelligence</p>
+        <h1>Every partnership,<br>remembered.</h1>
+        <p class="lede">
+          You met them at a conference, took a card, recorded a voice note in the
+          taxi, and meant to follow up. Sedona turns that scatter into a CRM that
+          keeps its own read on where each relationship actually stands.
+        </p>
 
-    <p class="nav-heading">Relationships</p>
-    <a class="nav-link" href="#/calendar" data-view="calendar">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-      <span>Calendar</span>
-    </a>
-    <a class="nav-link" href="#/crm" data-view="crm">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V8l6-4 6 4v13M15 21V11l6 4v6"/><path d="M7 12h2M7 16h2"/></svg>
-      <span>Companies</span>
-    </a>
-    <a class="nav-link" href="#/contacts" data-view="contacts">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0M17 11a3 3 0 1 0-1.8-5.4M16 20a6 6 0 0 0-1.2-3.6"/></svg>
-      <span>Contacts</span>
-    </a>
+        <!-- ============ Waitlist ============ -->
+        <form class="waitlist" id="waitlist" novalidate>
+          <div class="waitlist-row">
+            <label class="sr-only" for="wl-email">Work email</label>
+            <input class="input" type="email" id="wl-email" name="email"
+                   placeholder="you@company.com" autocomplete="email"
+                   required aria-describedby="wl-note">
+            <button class="btn btn-primary" type="submit" id="wl-submit">
+              Join the waitlist
+            </button>
+          </div>
+          <p class="waitlist-msg" id="wl-msg" role="status" aria-live="polite"></p>
+          <p class="waitlist-note faint" id="wl-note">
+            One email when we open access. No sharing, no newsletter, unsubscribe
+            in a click.
+          </p>
+        </form>
+      </div>
 
-    <p class="nav-heading">Agent</p>
-    <div class="agent-feed" id="agent-feed" aria-label="Recent agent activity"></div>
-  </nav>
+      <!-- A quiet product still: the agent's read on one relationship. -->
+      <aside class="hero-card card card-pad" aria-label="Example of an agent summary">
+        <div class="row-between">
+          <div class="row" style="gap:var(--s-3)">
+            <span class="avatar avatar-t2">TE</span>
+            <div>
+              <div style="font-weight:600">Terrafirma Energy</div>
+              <div class="muted" style="font-size:var(--t-sm)">Climate · Denver, CO</div>
+            </div>
+          </div>
+          <span class="badge badge-sage">Signed</span>
+        </div>
 
-  <!-- ===================== Views ===================== -->
-  <main class="app-main" id="view-host">
-    <section class="view" id="view-scan"     data-view="scan"     hidden></section>
-    <section class="view" id="view-voice"    data-view="voice"    hidden></section>
-    <section class="view" id="view-calendar" data-view="calendar" hidden></section>
-    <section class="view" id="view-crm"      data-view="crm"      hidden></section>
-    <section class="view" id="view-contacts" data-view="contacts" hidden></section>
-  </main>
-</div>
+        <hr class="hr">
 
-<!-- ===================== Bottom tab bar (mobile) ===================== -->
-<nav class="tabbar only-mobile" aria-label="Main">
-  <a class="tab" href="#/scan" data-view="scan">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M7 12h10"/></svg>
-    <span>Scan</span>
-  </a>
-  <a class="tab" href="#/voice" data-view="voice">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg>
-    <span>Voice</span>
-  </a>
-  <a class="tab" href="#/calendar" data-view="calendar">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-    <span>Calendar</span>
-  </a>
-  <a class="tab" href="#/crm" data-view="crm">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V8l6-4 6 4v13M15 21V11l6 4v6"/><path d="M7 12h2M7 16h2"/></svg>
-    <span>CRM</span>
-  </a>
-  <button class="tab" id="tab-search" type="button">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg>
-    <span>Search</span>
-  </button>
-</nav>
+        <p class="eyebrow" style="margin-bottom:var(--s-2)">The agent's read</p>
+        <p style="font-size:var(--t-sm); line-height:var(--lh-body)">
+          Momentum is good. Four people engaged, last touch five days ago, and
+          the pilot terms landed without pushback. Worth asking about their
+          Q3 expansion while the thread is warm.
+        </p>
 
-<script src="js/ui.js"></script>
-<script src="js/data.js"></script>
-<script src="js/crm.js"></script>
-<script src="js/calendar.js"></script>
-<script src="js/scan.js"></script>
-<script src="js/voice.js"></script>
-<script src="js/search.js"></script>
-<script src="js/router.js"></script>
+        <div class="row wrap" style="margin-top:var(--s-4); gap:var(--s-2)">
+          <span class="badge badge-rust">4 people</span>
+          <span class="badge badge-bloom">5 days ago</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===================== What it does ===================== -->
+  <section class="section">
+    <div class="shell">
+      <p class="eyebrow">What it does</p>
+      <h2 style="margin-bottom:var(--s-8)">Capture is the hard part. So that is what we built.</h2>
+
+      <div class="feature-grid">
+        <article class="card card-pad feature reveal">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M7 12h10"/></svg>
+          </span>
+          <h3>Scan a card</h3>
+          <p class="muted">
+            Point the camera at a business card. The contact, their company, and
+            where you met are filed before you put your phone away.
+          </p>
+        </article>
+
+        <article class="card card-pad feature reveal">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg>
+          </span>
+          <h3>Talk it through</h3>
+          <p class="muted">
+            Say what happened in the meeting. The agent pulls out the commitments,
+            the follow-ups, and who owns them.
+          </p>
+        </article>
+
+        <article class="card card-pad feature reveal">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          </span>
+          <h3>See what is next</h3>
+          <p class="muted">
+            A calendar built around relationships rather than hours — who is going
+            cold, which intro you promised, what is overdue.
+          </p>
+        </article>
+
+        <article class="card card-pad feature reveal">
+          <span class="feature-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l6-4 6 4v13M15 21V11l6 4v6"/><path d="M7 12h2M7 16h2"/></svg>
+          </span>
+          <h3>Know where you stand</h3>
+          <p class="muted">
+            Every partnership from prospect to signed, each with the agent's
+            honest read on whether it is actually moving.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Closing CTA ===================== -->
+  <section class="section closing">
+    <div class="shell closing-inner">
+      <h2>Try it before you commit an email address.</h2>
+      <p class="lede" style="margin-inline:auto">
+        The demo is the whole product, running on invented companies and people.
+        Nothing to install, nothing to sign up for.
+      </p>
+      <div class="row wrap" style="justify-content:center; margin-top:var(--s-8)">
+        <a class="btn btn-primary" href="demo.html">Open the demo</a>
+        <a class="btn btn-secondary" href="#waitlist">Join the waitlist</a>
+      </div>
+      <p class="mono faint" style="margin-top:var(--s-6)">Demo data is fictional</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="shell row-between wrap">
+    <p class="muted" style="font-size:var(--t-sm)">
+      © <span id="year">2026</span> Sedona AI
+    </p>
+    <nav class="row wrap" style="gap:var(--s-5); font-size:var(--t-sm)" aria-label="Footer">
+      <a href="demo.html">Demo</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="mailto:hello@sedona.ai">Contact</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="js/landing.js"></script>
 </body>
 </html>
