@@ -31,9 +31,8 @@
   margin-block: var(--s-3) var(--s-5);
 }
 
-/* The sample card is decoration on a phone — the form matters more, so it
-   drops below the fold rather than pushing the form down. */
-.hero-card { order: 2; }
+/* On a phone the sample card follows the form in source order, which is what
+   we want — the form should not get pushed below a decorative panel. */
 
 @media (min-width: 1024px) {
   .hero { padding-block: var(--s-20) var(--s-24); }
