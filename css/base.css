@@ -1,0 +1,175 @@
+/* ==========================================================================
+   Sedona AI — Reset, typography, layout primitives
+   Mobile-first: base styles target 375px, min-width queries layer upward.
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;   /* stop iOS landscape font inflation */
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: var(--t-base);
+  line-height: var(--lh-body);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;              /* body never scrolls sideways */
+}
+
+img, svg, video, canvas { display: block; max-width: 100%; height: auto; }
+
+h1, h2, h3, h4, p, figure, blockquote, ul, ol, dl, dd { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+
+/* --- Headings ----------------------------------------------------------- */
+h1, h2, .display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--track-display);
+  font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 40;
+  text-wrap: balance;
+}
+h1 { font-size: var(--t-4xl); }
+h2 { font-size: var(--t-3xl); }
+
+h3, h4 {
+  font-family: var(--font-ui);
+  line-height: var(--lh-snug);
+  letter-spacing: -0.011em;
+}
+h3 { font-size: var(--t-lg); font-weight: 600; }
+h4 { font-size: var(--t-base); font-weight: 600; }
+
+p { text-wrap: pretty; }
+
+/* --- Links -------------------------------------------------------------- */
+a {
+  color: inherit;
+  text-decoration-color: color-mix(in srgb, currentColor 32%, transparent);
+  text-underline-offset: 0.18em;
+}
+a:hover { text-decoration-color: currentColor; }
+
+/* --- Forms inherit type ------------------------------------------------- */
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+}
+button { background: none; border: none; cursor: pointer; }
+
+/* --- Focus: always visible, never a mystery ----------------------------- */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--r-xs);
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* ==========================================================================
+   Utility primitives
+   ========================================================================== */
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--t-xs);
+  letter-spacing: var(--track-mono);
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.muted { color: var(--fg-muted); }
+.faint { color: var(--fg-faint); }
+.tnum  { font-variant-numeric: tabular-nums; }
+
+.lede {
+  font-size: var(--t-lg);
+  line-height: 1.5;
+  color: var(--fg-muted);
+  max-width: 56ch;
+}
+
+.shell {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: max(var(--s-5), var(--safe-l));
+}
+@media (min-width: 768px) { .shell { padding-inline: var(--s-8); } }
+
+.stack > * + * { margin-top: var(--s-4); }
+.stack-lg > * + * { margin-top: var(--s-8); }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+.row-between { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); }
+.wrap { flex-wrap: wrap; }
+.grow { flex: 1 1 auto; min-width: 0; }   /* min-width:0 stops flex overflow */
+
+.hr { height: 1px; background: var(--border); border: 0; margin: var(--s-6) 0; }
+
+/* Screen-reader only, but focusable when tabbed to. */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Wide content scrolls inside itself, never widening the page. */
+.scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+}
+
+/* Show/hide by breakpoint — used sparingly, layout does most of the work. */
+.only-mobile { display: revert; }
+.only-desk   { display: none !important; }
+@media (min-width: 1024px) {
+  .only-mobile { display: none !important; }
+  .only-desk   { display: revert !important; }
+}
+
+/* ==========================================================================
+   Motion — every animation is opt-out
+   ========================================================================== */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity var(--dur-slow) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
+}
+.reveal.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
