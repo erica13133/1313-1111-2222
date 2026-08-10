@@ -8,8 +8,11 @@
   const S = window.SEDONA;
 
   const DEFAULT_VIEW = 'calendar';
-  const VIEWS = ['scan', 'voice', 'calendar', 'crm', 'contacts'];
+  const VIEWS = ['scan', 'mycard', 'voice', 'calendar', 'crm', 'contacts'];
   const mounted = {};
+
+  /* Only for views whose route name does not capitalise into a readable title. */
+  const TITLES = { mycard: 'My card' };
 
   function currentView() {
     const name = (location.hash || '').replace(/^#\/?/, '').split('/')[0];
@@ -37,7 +40,7 @@
       mount(host, !mounted[view]);
       mounted[view] = true;
     }
-    document.title = view.charAt(0).toUpperCase() + view.slice(1) + ' — Sedona AI';
+    document.title = (TITLES[view] || view.charAt(0).toUpperCase() + view.slice(1)) + ' — Sedona AI';
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
 

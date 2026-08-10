@@ -439,6 +439,85 @@
 .capture-actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); margin-top: var(--s-3); }
 @media (min-width: 480px) { .capture-actions { grid-template-columns: repeat(3, 1fr); } }
 
+/* ==========================================================================
+   My card — photo in, shareable card out
+   ========================================================================== */
+.mycard-layout { display: grid; gap: var(--s-6); }
+@media (min-width: 1024px) {
+  .mycard-layout { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; }
+  /* The card is the subject; keep it in view while the form scrolls past it. */
+  .mycard-layout > :first-child { position: sticky; top: var(--s-6); }
+}
+
+.card-preview {
+  position: relative;
+  max-width: 380px;
+  margin-inline: auto;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  transition: outline-color var(--dur-fast) var(--ease-out);
+  outline: 2px dashed transparent;
+  outline-offset: 4px;
+}
+.card-preview.is-over { outline-color: var(--accent); }
+/* The canvas is the export at 1:1; CSS only ever scales it down. */
+.card-canvas { display: block; width: 100%; height: auto; }
+
+/* Camera preview sits over the card while framing the shot. */
+.card-preview .capture-stage {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+}
+
+.mycard-form .field-grid {
+  display: grid;
+  gap: var(--s-3);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 560px) { .mycard-form .field-grid { grid-template-columns: 1fr 1fr; } }
+.mycard-form .field { display: block; min-width: 0; }
+.mycard-form .field.is-wide { grid-column: 1 / -1; }
+.mycard-form .field-label { display: block; margin-bottom: var(--s-1); }
+.mycard-form .input { width: 100%; }
+.mycard-form textarea.input { resize: vertical; line-height: var(--lh-snug); }
+
+/* Segmented light / dark switch for the card itself — independent of the
+   app theme, because the card is a file that leaves the app. */
+.seg {
+  display: inline-flex;
+  padding: 2px;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  background: var(--bg-recessed);
+}
+.seg-btn {
+  padding: 4px var(--s-3);
+  border: 0;
+  border-radius: var(--r-xs);
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: var(--t-xs);
+  cursor: pointer;
+}
+.seg-btn.is-on { background: var(--surface); color: var(--fg); box-shadow: var(--shadow-sm); }
+
+/* Every block below sets an explicit `display`, which outranks the user-agent
+   rule behind the [hidden] attribute. Restore it for the ones JS toggles. */
+.mycard-form .field[hidden],
+.mycard-form .field-grid[hidden],
+.card-preview .capture-stage[hidden] { display: none; }
+
+.range { width: 100%; accent-color: var(--accent); }
+
+.check { display: flex; align-items: center; gap: var(--s-2); font-size: var(--t-sm); cursor: pointer; }
+.check input { accent-color: var(--accent); width: 16px; height: 16px; }
+
 .field-row {
   display: flex; align-items: center; gap: var(--s-3);
   padding: var(--s-3) 0;

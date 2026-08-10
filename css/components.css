@@ -469,3 +469,10 @@
   text-transform: uppercase;
   color: var(--fg-faint);
 }
+/* Solid, not dashed — this variant marks output that is genuinely live. */
+.demo-tag.is-live {
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--sage-vortex) 40%, transparent);
+  background: var(--sage-vortex-soft);
+  color: var(--sage-vortex);
+}

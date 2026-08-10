@@ -54,6 +54,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M7 12h10"/></svg>
       <span>Scan a card</span>
     </a>
+    <a class="nav-link" href="#/mycard" data-view="mycard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="2"/><path d="M5 16a3.5 3.5 0 0 1 7 0M15 10h4M15 14h4"/></svg>
+      <span>My card</span>
+    </a>
     <a class="nav-link" href="#/voice" data-view="voice">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg>
       <span>Voice agent</span>
@@ -80,6 +84,7 @@
   <!-- ===================== Views ===================== -->
   <main class="app-main" id="view-host">
     <section class="view" id="view-scan"     data-view="scan"     hidden></section>
+    <section class="view" id="view-mycard"   data-view="mycard"   hidden></section>
     <section class="view" id="view-voice"    data-view="voice"    hidden></section>
     <section class="view" id="view-calendar" data-view="calendar" hidden></section>
     <section class="view" id="view-crm"      data-view="crm"      hidden></section>
@@ -111,11 +116,21 @@
   </button>
 </nav>
 
+<!-- OCR runs entirely in the browser: Tesseract.js (Apache-2.0) for text,
+     jsQR (Apache-2.0) for the QR/vCard fast path. No card image is uploaded.
+     qrcode-generator (MIT) is the encoder for the card My card generates —
+     jsQR only reads. -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+
 <script src="js/ui.js"></script>
 <script src="js/data.js"></script>
 <script src="js/crm.js"></script>
 <script src="js/calendar.js"></script>
+<script src="js/ocr.js"></script>
 <script src="js/scan.js"></script>
+<script src="js/mycard.js"></script>
 <script src="js/voice.js"></script>
 <script src="js/search.js"></script>
 <script src="js/router.js"></script>
