@@ -3,12 +3,14 @@
    Real, in-browser text extraction. Nothing leaves the device.
 
    Pipeline, cheapest step first:
-     1. QR / vCard fast path — many modern cards carry one, and decoding it is
+     1. Card detection — find the card in the frame and crop to it, so every
+        later step measures the card instead of the room around it.
+     2. QR / vCard fast path — many modern cards carry one, and decoding it is
         exact rather than a guess. If it hits, we skip OCR entirely.
-     2. Canvas preprocessing — grayscale, auto-invert for light-on-dark cards,
+     3. Canvas preprocessing — grayscale, auto-invert for light-on-dark cards,
         percentile contrast stretch, upscale toward Tesseract's happy DPI.
-     3. Tesseract.js recognition — word-level text with confidence + boxes.
-     4. Field extraction — regex for the machine-readable fields, geometric
+     4. Tesseract.js recognition — word-level text with confidence + boxes.
+     5. Field extraction — regex for the machine-readable fields, geometric
         and lexical heuristics for the human ones.
 
    Attaches to window.OCR.
@@ -21,9 +23,16 @@
   const TARGET_W = 1500;
   const MIN_W = 1000;
 
-  /* Below these, the read is not worth showing as fact. */
+  /* Below these, the read is not worth showing as fact. Confidence alone is not
+     enough: Tesseract reports how sure it is about the words it found, not how
+     much of the card it missed, so a clean read of the three biggest lines
+     scores ~90 while every contact detail is still sitting unread. MIN_STRONG
+     is the coverage check — email, phone and website are the fields a regex can
+     actually validate, and a card that yields none of them was not read. */
   const MIN_MEAN_CONF = 55;
   const MIN_FIELDS = 2;
+  const MIN_STRONG = 1;
+  const STRONG_KEYS = ['email', 'phone', 'website'];
 
   const FIELD_ORDER = [
     { key: 'name', label: 'Full name' },
@@ -42,10 +51,17 @@
     'executive|evangelist|advocate|recruiter|alliances|operations|marketing|sales|' +
     'business\\s+development|product|program|project)\\b', 'i');
 
+  /* Not every organisation is a company. Trade bodies, institutes and chambers
+     print their full legal name on the card exactly where a company name goes,
+     and if this list misses them the name heuristic happily takes the whole
+     organisation as the person's name. */
   const ORG_RX = new RegExp('\\b(inc|llc|ltd|limited|corp|corporation|company|gmbh|' +
     'plc|group|holdings|partners|labs|laboratories|studio|studios|systems|solutions|' +
     'technologies|technology|software|works|industries|ventures|capital|consulting|' +
-    'associates|agency|media|robotics|freightworks)\\b\\.?', 'i');
+    'associates|agency|media|robotics|freightworks|association|associations|' +
+    'foundation|society|societies|institute|institution|council|chamber|federation|' +
+    'alliance|academy|university|college|bank|trust|cooperative|authority|' +
+    'commission|organisation|organization|enterprise|enterprises)\\b\\.?', 'i');
 
   /* Enough TLDs to cover business cards without matching every "Ave." */
   const TLD = '(?:com|net|org|io|co|ai|dev|app|xyz|us|uk|de|fr|es|it|nl|se|no|ca|au|' +
@@ -561,18 +577,25 @@
     const picked = extractFields(lines);
     const fields = toFields(picked.values);
     const found = fields.filter((f) => f.value).length;
+    const strong = fields.filter((f) => f.value && STRONG_KEYS.indexOf(f.key) !== -1).length;
     const meanConf = Math.round(typeof data.confidence === 'number'
       ? data.confidence
       : mean(lines.map((ln) => ln.conf)));
 
+    const reason = found < MIN_FIELDS ? 'too-few-fields'
+      : strong < MIN_STRONG ? 'partial-read'
+        : meanConf < MIN_MEAN_CONF ? 'low-confidence'
+          : null;
+
     stage('done', 1);
     return {
-      ok: found >= MIN_FIELDS && meanConf >= MIN_MEAN_CONF,
+      ok: !reason,
       source: 'ocr',
-      reason: found < MIN_FIELDS ? 'too-few-fields' : (meanConf < MIN_MEAN_CONF ? 'low-confidence' : null),
+      reason: reason,
       fields: fields,
       companyId: picked.companyId,
       meanConf: meanConf,
+      strong: strong,
       rawText: picked.rawText
     };
   }

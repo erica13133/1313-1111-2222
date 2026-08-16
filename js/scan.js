@@ -188,6 +188,7 @@
       engine: 'The OCR engine could not load. Check the connection and try again — the language data is fetched once, then cached.',
       'no-text': 'No text was found on that image. Fill the frame with the card, hold it flat, and avoid glare.',
       'too-few-fields': 'Only a fragment came back legible. A straighter, closer shot in better light usually fixes it.',
+      'partial-read': 'The big lines read cleanly but the contact details did not, so this is half a card. Fill the frame with it and shoot straight on.',
       'low-confidence': 'The read was too uncertain to show as fact. Try again with more light, or type the details in by hand.'
     }[reason] || 'That card could not be read.';
 

@@ -1,9 +1,10 @@
 /* ==========================================================================
    Sedona AI — voice agent
    Records with MediaRecorder when the mic is granted, and falls back to a
-   simulated recording when it is not. Both paths run the same extraction
-   flow: transcript → entities → action items, with the results labelled
-   DEMO DATA because no model actually runs here.
+   simulated recording when it is not. A real recording is transcribed on the
+   device by js/stt.js and then mined for entities and commitments; the
+   simulated path has no audio to read, so it falls back to an authored memo
+   and says so.
    ========================================================================== */
 (function () {
   'use strict';
@@ -125,13 +126,84 @@
     ui.hint.textContent = 'Processing…';
   }
 
+  /** Live transcription when we have real audio; the authored memo otherwise. */
   function finish(ui) {
-    // A live recording still resolves to an authored memo — no model runs here.
-    const memo = S.memos[0];
     ui.hint.textContent = 'Tap to record';
-    U.thinkSequence(ui.think,
-      ['Transcribing audio', 'Extracting people and companies', 'Drafting action items'],
-      function () { renderMemo(ui.out, memo, true); }, 780);
+
+    const canTranscribe = !simulated && chunks.length && window.STT && window.STT.available();
+    if (!canTranscribe) {
+      U.thinkSequence(ui.think,
+        ['Transcribing audio', 'Extracting people and companies', 'Drafting action items'],
+        function () { renderMemo(ui.out, S.memos[0], true); }, 780);
+      return;
+    }
+
+    const steps = progressSteps(ui.think);
+    const blob = new Blob(chunks, { type: chunks[0].type });
+    const recordedAt = new Date();
+
+    window.STT.transcribe(blob, steps.update).then(function (res) {
+      if (!res.ok) {
+        steps.fail(res.reason === 'decode'
+          ? 'That recording could not be decoded.'
+          : 'Nothing audible came through — try again a little closer to the mic.');
+        return;
+      }
+      const picked = window.STT.extract(res.text);
+      steps.clear();
+      renderMemo(ui.out, {
+        id: 'live-' + recordedAt.getTime(),
+        title: memoTitle(picked, recordedAt),
+        recordedAt: recordedAt,
+        seconds: Math.round(res.seconds) || seconds,
+        companyId: picked.companyId,
+        contactIds: picked.contactIds,
+        transcript: picked.transcript,
+        entities: picked.entities,
+        actions: picked.actions,
+        live: true
+      }, true);
+    }).catch(function (err) {
+      if (window.console) window.console.warn('[voice] transcription failed:', err);
+      steps.fail('The transcription model could not load. Check the connection — it is fetched once, then cached.');
+    });
+  }
+
+  /** Name the memo after whoever it turned out to be about. */
+  function memoTitle(picked, when) {
+    const who = picked.entities.people[0] || picked.entities.companies[0];
+    const stamp = fmtDate(when, 'long');
+    return who ? 'Memo — ' + who : 'Voice memo — ' + stamp;
+  }
+
+  /* The model is a real download on first use, so this reports actual progress
+     rather than animating through invented stages. */
+  function progressSteps(host) {
+    const labels = {
+      decode: 'Decoding audio',
+      engine: 'Loading the speech model',
+      read: 'Transcribing'
+    };
+    const row = el('div', { class: 'think-step is-active' },
+      [el('span', { class: 'spinner' }), el('span', {}, 'Decoding audio')]);
+    const note = el('div', { class: 'mono faint', style: 'margin-top:6px' }, '');
+    host.replaceChildren(row, note);
+
+    return {
+      update: function (stage, progress) {
+        row.lastChild.textContent = labels[stage] || 'Working';
+        note.textContent = stage === 'engine' && progress > 0 && progress < 1
+          ? Math.round(progress * 100) + '% of the model downloaded — this happens once'
+          : '';
+      },
+      clear: function () { host.replaceChildren(); },
+      fail: function (message) {
+        host.replaceChildren(el('div', { class: 'notice' }, [
+          el('span', { style: 'flex-shrink:0' }, '⚠'),
+          el('div', {}, message)
+        ]));
+      }
+    };
   }
 
   function icon(kind) {
@@ -219,7 +291,9 @@
     host.replaceChildren(
       el('div', { class: 'row-between', style: 'margin-bottom:var(--s-2)' }, [
         el('h3', { style: 'margin:0' }, isFresh ? 'Just recorded' : memo.title),
-        el('span', { class: 'demo-tag' }, 'Demo data')
+        memo.live
+          ? el('span', { class: 'demo-tag is-live' }, 'On-device')
+          : el('span', { class: 'demo-tag' }, 'Demo data')
       ]),
       el('p', { class: 'mono faint', style: 'margin-bottom:var(--s-4)' },
         fmtDuration(memo.seconds) + ' · ' + fmtDate(memo.recordedAt, 'long') +
@@ -284,6 +358,9 @@
     btn.addEventListener('click', function () {
       if (isRecording) stop(ui); else start(ui);
     });
+
+    // Fetch the model while they are still talking, not after they stop.
+    if (window.STT && window.STT.available()) window.STT.preload();
 
     const library = el('div', {}, [
       el('h4', { style: 'margin:var(--s-6) 0 var(--s-3)' }, 'Memo library'),
