@@ -125,3 +125,43 @@ It fits the no-build constraint, needs no backend, and lets us delete the
 4. Run Tesseract, take real `conf` values from its word-level data
 5. Parse fields with regex + heuristics into the existing `{ key, label, value, conf }` shape
 6. Fall back to `S.cardFixtures` when overall confidence is too low to be useful
+
+---
+
+## Measured afterwards: the scale defect
+
+Testing the shipped pipeline against a real, handheld photo of a business card
+turned up a defect worth fixing before any engine change is considered.
+
+**Symptom.** A card filling under half the frame returned **85 characters** of
+raw text — the three largest lines only. Email, phone, website and address never
+reached the text layer at all. Two of six fields came back, one of them wrong.
+
+**Cause.** `preprocess()` scales the *frame* toward `TARGET_W` (1500 px), not the
+*card*. A card occupying 45% of the frame therefore lands around 675 px wide —
+well under the ~1000 px floor Tesseract needs at this type size.
+
+**Evidence.** Same image, same engine, same preprocessing, upscaled 3×:
+
+| | Raw text | Fields |
+| --- | --- | --- |
+| As shipped | 85 chars | 2 (name wrong) |
+| Upscaled 3× | **224 chars** | 4, company correct |
+
+### What was tried and abandoned
+
+Cropping to the card first. Two detection approaches both failed on an unevenly
+lit handheld shot:
+
+- **Otsu threshold + largest blob** — the card's bright pixels merge with a lit
+  background, so the crop took a tall slice, then decided it was a dark card and
+  inverted it. Output fell to two fragments.
+- **Gradient-density grid** — text regions merged with structured background
+  (window frames, table edges) under 8-connectivity.
+
+Reliable card detection is contour finding and quad fitting — a real computer
+vision task, not an afternoon. **Raising the scale is the cheap fix that
+captures most of the win**; detection can wait for a genuine need.
+
+> ⚠️ Naive upscaling of the whole frame costs time: 3× on a 607×1080 source took
+> ~5 s. Worth bounding by output pixels rather than a fixed multiplier.
